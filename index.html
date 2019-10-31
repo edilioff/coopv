@@ -1,0 +1,187 @@
+---
+title: CoTech
+layout: home
+---
+
+<div id="kpi">
+  <div class="row">
+    <div class="small-12 medium-10 large-8 small-centered columns">
+
+      <div class="small-3 columns">
+        <img src="/assets/img/icon-coops.png" class="float-center">
+        <h6>Co-ops</h6>
+        <h5>{{ site.coops.size }}</h5>
+      </div>
+      <div class="small-3 columns">
+        <img src="/assets/img/icon-staff.png" class="float-center">
+        <h6>Staff</h6>
+        {% assign total_members = 0 %}
+        {% for coop in site.coops %}
+        {% assign total_members = total_members | plus: coop.members %}
+        {% endfor %}
+        <h5>{{ total_members }}+</h5>
+      </div>
+      <div class="small-3 columns">
+        <img src="/assets/img/icon-revenue.png" class="float-center">
+        <h6>Revenue</h6>
+        <h5>£10.3m</h5>
+      </div>
+      <div class="small-3 columns">
+        <img src="/assets/img/icon-clients.png" class="float-center">
+        <h6>Clients</h6>
+        <h5>{{ site.clients.size }}+</h5>
+      </div>
+        <br />
+        <p>CoTech is a network of ethical co-operatives providing technology, digital and creative services.</p>
+        <p>Working with co-operatives has major benefits: you’ll work directly with the people who own the business, who have a stake in making sure your project succeeds. With no private shareholders drawing out dividends, you’ll get genuine value for money.  And on top of that, you’ll get the benefit of working with small and responsive businesses which draw on the skills, specialisms and security of a large network.</p>
+        <p>Browse our co-operatives and services or get in touch if you’d like us to help you find the right co-op partner.</p>
+        <p>If you’re a tech co-op or a co-operatively minded freelancer and you’d like to <a href="/join">join us</a>.</p>
+
+    </div>
+  </div>
+</div>
+
+
+<section id="members" data-magellan-target="members">
+  <div class="row">
+    <div class="small-12 columns">
+
+      <h2>Members</h2>
+      <p>Take a look at who is part of the CoTech network</p>
+
+      <div class="view float-center">
+        <ul class="tabs" data-tabs id="coops-view-tabs">
+          <li class="tabs-title is-active"><a href="#grid" aria-selected="true">Grid</a></li>
+          <li class="separator">|</li>
+          <li class="tabs-title"><a href="#map">Map</a></li>
+        </ul>
+      </div>
+
+      <div class="tabs-content" data-tabs-content="coops-view-tabs">
+
+        <!-- START Grid View Content -->
+        <div class="tabs-panel is-active" id="grid">
+          <div class="row small-up-2 medium-up-4 large-up-6 small-collapse">
+            {% for coop in site.coops %}
+            <div class="column">
+              <a class="coop-thumb" href="{{ coop.url | relative_url }}">
+                  <div class="coop-thumb-img has-tip tip-bottom radius" style="background-image: url(/images/coops/{{ coop.slug }})" data-tooltip aria-haspopup="true" title="{{ coop.name }}"></div>
+                </a>
+            </div>
+            {% endfor %}
+            <div class="column">
+              <a href="join" class="coop-thumb">
+                  <h5 id="join-us">Join CoTech</h5>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- END Grid View Content -->
+
+        <!-- START Map View Content -->
+        <div class="tabs-panel" id="map">
+          <div class="row small-up-2 medium-up-4 large-up-6 small-collapse">
+            <div id="map-coops"></div>
+            <script type="text/javascript">
+              var app = window.app || {};
+              app.mapEntries = [
+                {% for coop in site.coops %}
+                  {
+                    lat: {{ coop.latitude }},
+                    lng: {{ coop.longitude }},
+                    markerText: '<b><a href=\"{{ coop.url | relative_url }}\">{{ coop.name }}</a></b><br><br>{{ coop.address | split: "," | join: "<br>" }}'
+                  },
+                {% endfor %}
+              ];
+            </script>
+          </div>
+        </div>
+        <!-- END Map View Content -->
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="clients" data-magellan-target="clients">
+  <div class="row">
+    <div class="small-12 columns">
+      <h2>Clients</h2>
+      <p>Here are some of the amazing clients we have worked with so far</p>
+      <div id='client-list' class="row small-up-2 medium-up-3 large-up-6">
+        {% assign clients = site.clients %}
+        {% for client in clients %}
+          <div class="column client">
+            <div class="client-thumb" style='background-image: url(/images/clients/{{ client.slug }}') title="{{client.slug}}"></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services" data-magellan-target="services">
+  <div class="row">
+    <div class="small-12 columns">
+
+      <h2>Services</h2>
+      <p>Here are the services the network are able to offer</p>
+
+      <div class="row small-up-3 medium-up-4 large-up-6 small-collapse">
+        {% for service in site.services %}
+          <div class="column">
+            <a href="{{ service.url | relative_url }}" class="service-thumb">
+              <div class="service-thumb-img float-center" style="background-image: url(/images/services/{{ service.slug }})"></div>
+              <h5>{{ service.name }}</h5>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+</section>
+
+<section id="technologies" data-magellan-target="technologies">
+  <div class="row">
+    <div class="small-12 columns">
+
+      <h2>Technologies</h2>
+      <p>Here are some of the technologies we are currently using - the list continues to grow!</p>
+
+      <div class="row small-up-3 medium-up-4 large-up-6">
+        {% for technology in site.technologies %}
+          <div class="column">
+            <a href="{{ technology.url | relative_url }}" class="technology-thumb">
+              <div class="technology-thumb-img" style="background-image: url(/images/technologies/{{ technology.slug }})"></div>
+              <h5>{{ technology.name }}</h5>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" data-magellan-target="contact">
+  <div class="row">
+    <div class="small-12 medium-6 small-centered columns">
+
+      <h2>Get In Touch</h2>
+        <p>
+            All the members of CoTech are available to hire, and each has different specialisms. We vary in size from 2 people to 40+ people, and use different technologies. If you know what <a href="#technologies">technology</a>  or <a href="#services">service</a>  you're looking, you can use this site to find suitable co-ops. If you're not sure what you're looking for you can browse the <a href="#members">members</a> and get in touch with one that you like the look of. We're all committed to being honest about our capabilites and capacities, and we'll refer you to a different co-op if we think they'll offer you better value.
+        </p>
+        <div class="row forum-links">
+            <div class="small-12 medium-6 columns">
+                    <a href="https://community.coops.tech/"><img src="/assets/img/discourse-300.png" /></a>
+            </div>
+            <div class="small-12 medium-6 columns">
+
+                <a href="https://community.coops.tech/"><img class="mx-auto"  src="/assets/img/cotech-300.png" /></a>
+            </div>
+        </div>
+        <p>
+            If you don't want to hire us but want to find out more about co-ops, find a job in a co-op or discuss how technology can help solve the world's myriad problems, please head over to our <a href="{{ site.forum }}">Discourse forum</a>.
+        </p>
+
+    </div>
+  </div>
+</section>

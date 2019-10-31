@@ -1,0 +1,41 @@
+# Serve .html files without extensions and allow directory listings
+Options +MultiViews +Indexes
+# If a SVG and a PNG exists the prefer the SVG
+AddType image/svg+xml;qs=0.9 svg sgvz
+AddType image/png;qs=0.8 png
+# Work around Apache bug from 2002
+# https://bz.apache.org/bugzilla/show_bug.cgi?id=53595
+# https://kevinlocke.name/bits/2012/07/20/serving-xhtml-with-apache-multiviews/
+Header always edit "Content-Type" ";\s*qs=[0-9]*(?:\.[0-9]+)?\s*" ""
+# Gzip these file types
+AddOutputFilter DEFLATE html
+AddOutputFilter DEFLATE svg
+AddOutputFilter DEFLATE css
+AddOutputFilter DEFLATE js
+# URL's that changed
+Redirect /coops/ https://www.coops.tech/co-op/
+Redirect /technology/gnu-bash https://www.coops.tech/technology/bash
+Redirect /co-op/graphics-coop https://www.coops.tech/co-op/form-and-function
+# Canonical URLs redirect to the domain with a www
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteCond %{HTTP_HOST} ^coops\.tech$
+  RewriteRule ^/?(.*) https://www.coops.tech/$1 [R,L] 
+</IfModule>
+# Redirect HTTP to HTTPS
+# https://wiki.apache.org/httpd/RewriteHTTPToHTTPS
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+</IfModule>
+# Strict Transport Security Header, this prevents clients 
+# with STS support from accessing the site using HTTP
+# https://stackoverflow.com/questions/24144552/how-to-set-hsts-header-from-htaccess-only-on-https
+Header set Strict-Transport-Security "max-age=31536000" env=HTTPS
+# Directory Listings
+HeaderName /top.html
+ReadmeName /bot.html
+IndexOptions FancyIndexing VersionSort HTMLTable NameWidth=* DescriptionWidth=*
+IndexOptions Charset=UTF-8 SuppressHTMLPreamble XHTML TrackModified IconsAreLinks
+IndexOptions SuppressDescription

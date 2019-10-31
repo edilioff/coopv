@@ -1,0 +1,75 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% if page.description %}
+  <meta name="description" content="{{ page.description | strip_html | strip_newlines | condense_spaces }}" />
+{% elsif page.collection == 'coops' and page.content %}
+  <meta name="description" content="{{ page.content | strip_html | strip_newlines | condense_spaces | truncate:150 }}" />
+{% else %}
+  <meta name="description" content="{{ site.description }}" />
+{% endif %}
+  <meta charset="UTF-8">
+{% if page.layout == "home" %}
+  <title>{{ page.title }} &laquo; {{ site.long_title }}</title>
+{% else %}
+  <title>{{ page.title }} &laquo; {{ site.title }} &laquo; {{ site.long_title }}</title>
+{% endif %}
+  <meta property="og:type" content="website" />
+{% if page.layout == "home" %}
+  <meta property="og:title" content="{{ page.title }} &laquo; {{ site.long_title }}" />
+{% else %}
+  <meta property="og:title" content="{{ page.title }} &laquo; {{ site.title }} &laquo; {{ site.long_title }}" />
+{% endif %}
+{% if page.description %}
+  <meta property="og:description" content="{{ page.description | strip_html | strip_newlines }}" />
+{% elsif page.collection == 'coops' and page.content %}
+  <meta property="og:description" content="{{ page.content | strip_html | strip_newlines | condense_spaces | truncate:150 }}" />
+{% else %}
+  <meta property="og:description" content="{{ site.description }}" />
+{% endif %}
+  <meta property="og:site_name" content="{{ page.title }} &laquo; {{ site.long_title }}" />
+{% if page.collection == 'coops' %}
+  <meta property="og:image" content="/images/coops/{{ page.slug }}.png" />
+{% elsif page.collection == 'services' %}
+  <meta property="og:image" content="/images/services/{{ page.slug }}.png" />
+{% elsif page.collection == 'technologies' %}
+  <meta property="og:image" content="/images/technologies/{{ page.slug }}.png" />
+{% elsif page.collection == 'clients' %}
+  <meta property="og:image" content="/images/clients/{{ page.slug }}.png" />
+{% else %}
+  <meta property="og:image" content="/assets/img/Cotech_512x512.png" />
+{% endif %}
+  <meta property="og:locale" content="en_GB" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@CotechUK" />
+{% if page.collection == 'coops' %}
+  <meta name="twitter:image" content="{{ site.url }}/images/coops/{{ page.slug }}.png" />
+{% elsif page.collection == 'services' %}
+  <meta name="twitter:image" content="{{ site.url }}/images/services/{{ page.slug }}.png" />
+{% elsif page.collection == 'technologies' %}
+  <meta name="twitter:image" content="{{ site.url }}/images/technologies/{{ page.slug }}.png" />
+{% elsif page.collection == 'clients' %}
+  <meta name="twitter:image" content="{{ site.url }}/images/clients/{{ page.slug }}.png" />
+{% else %}
+  <meta name="twitter:image" content="{{ site.url }}/assets/img/Cotech_512x512.png" />
+{% endif %}
+  <link rel="canonical" href="{{ page.url | absolute_url }}" />
+  <link rel='stylesheet' id='app-css' href='/assets/css/app.css?ver=4.8' type='text/css' media='all' />
+  <script type='text/javascript' src='/assets/js/vendor.js?ver=4.8'></script>
+  <link rel="icon" href="/assets/img/cropped-cotech_512x512-32x32.png" sizes="32x32" />
+  <link rel="icon" href="/assets/img/cropped-cotech_512x512-192x192.png" sizes="192x192" />
+  <link rel="apple-touch-icon-precomposed" href="/assets/img/cropped-cotech_512x512-180x180.png" />
+  <meta name="msapplication-TileImage" content="/assets/img/cropped-cotech_512x512-270x270.png" />
+  <style type="text/css" id="wp-custom-css">
+    section#contact div.row div p a:active,
+    section#contact div.row div p a:focus,
+    section#contact div.row div p a:hover {
+      text-decoration: underline;
+      color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="/assets/foundation-icons/foundation-icons.css">
+  <link rel="icon" type="image/x-icon" href="/assets/img/CoTech-logo.png">
+  <script type="text/javascript">
+    window.mapboxAccessToken = '{{ site.mapbox_access_token }}';
+  </script>
+</head>

@@ -1,0 +1,67 @@
+image: ruby:2.5.3
+
+stages:
+- test
+- staging
+- production
+
+variables:
+  JEKYLL_ENV: production
+  LC_ALL: C.UTF-8
+
+cache:
+  key: gems
+  paths:
+    - vendor
+
+before_script:
+  - 'which rsync || ( apt-get update -qq && apt-get install rsync -yqq )'
+  - eval $(ssh-agent -s)
+  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+  - bundle install --path vendor
+
+test:
+  stage: test
+  script:
+  - bundle exec jekyll build -d test
+  artifacts:
+    paths:
+    - test
+  except:
+  - master
+
+deploy:dev:
+  stage: staging
+  script:
+  - bundle exec jekyll build -d public
+  - rsync -aqz --delete-after public/ cotech@webarch2.co.uk:sites/dev/
+  artifacts:
+    paths:
+    - public
+  environment:
+    name: dev
+    url: https://dev.coops.tech
+  only:
+  - master
+
+deploy:production:
+  stage: production
+  script:
+  - bundle exec jekyll build -d public
+  - rsync -aqz --delete-after public/ cotech@webarch2.co.uk:sites/default/
+  artifacts:
+    paths:
+    - public
+  environment:
+    name: production
+    url: https://www.coops.tech
+  only:
+  - master
+  when: manual
+
+after_script:
+   - rm -rf /root/.ssh/
